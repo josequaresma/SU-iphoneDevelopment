@@ -82,7 +82,7 @@
                         self.lastMoveDescription = [NSString stringWithFormat:@"%@ and %@ don't match! %d points penalty!",
                                                     card.contents, otherCard.contents, MISMATCH_PENALTY];
                     }
-                    break;
+                    if (!self.isIn3CardMode) {break;}
                 } else
                 {
                     self.lastMoveDescription = [NSString stringWithFormat:@"Flipped up %@", card.contents];

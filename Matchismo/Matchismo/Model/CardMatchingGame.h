@@ -20,7 +20,7 @@
 - (Card *)cardAtIndex:(NSUInteger)index;
 
 @property (nonatomic, readonly) NSString *lastMoveDescription;
-
 @property (nonatomic, readonly) int score;
+@property (nonatomic, getter = isIn3CardMode) BOOL in3CardMode;
 
 @end

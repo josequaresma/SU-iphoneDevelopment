@@ -19,9 +19,14 @@
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (weak, nonatomic) IBOutlet UILabel *lastMoveLabel;
 
+
 @end
 
 @implementation CardGameViewController
+
+- (IBAction)gameModeControl:(UISegmentedControl *)sender {
+    self.game.in3CardMode = sender.selectedSegmentIndex;
+}
 
 - (IBAction)dealButton {
     //[self.game initWithCardCount:[self.cardButtons count] usingDeck:[[PlayingCardDeck alloc] init]];
