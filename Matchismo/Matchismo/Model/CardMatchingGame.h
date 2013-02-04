@@ -19,6 +19,8 @@
 
 - (Card *)cardAtIndex:(NSUInteger)index;
 
+@property (nonatomic, readonly) NSString *lastMoveDescription;
+
 @property (nonatomic, readonly) int score;
 
 @end

@@ -13,10 +13,18 @@
 @property (strong, nonatomic) NSMutableArray *cards; //of Card
 
 @property (readwrite, nonatomic) int score;
+@property (nonatomic, readwrite) NSString *lastMoveDescription;
 
 @end
 
 @implementation CardMatchingGame
+
+- (NSString *)lastMoveDescription
+{
+    if (!_lastMoveDescription) _lastMoveDescription = @"description of last move :)";
+    return _lastMoveDescription;
+}
+
 
 - (NSMutableArray *)cards
 {
@@ -65,15 +73,25 @@
                         otherCard.unplayable = YES;
                         card.unplayable = YES;
                         self.score += matchScore * MATCH_BONUS;
+                        self.lastMoveDescription = [NSString stringWithFormat:@"Matched %@ and %@ for %d points",
+                                                    card.contents, otherCard.contents, matchScore * MATCH_BONUS];
                     } else
                     {
                         otherCard.faceUp = NO;
                         self.score -= MISMATCH_PENALTY;
+                        self.lastMoveDescription = [NSString stringWithFormat:@"%@ and %@ don't match! %d points penalty!",
+                                                    card.contents, otherCard.contents, MISMATCH_PENALTY];
                     }
                     break;
+                } else
+                {
+                    self.lastMoveDescription = [NSString stringWithFormat:@"Flipped up %@", card.contents];
                 }
             }
             self.score -= FLIP_COST;
+        } else
+        {
+            self.lastMoveDescription = [NSString stringWithFormat:@"Flipped down %@", card.contents];
         }
         card.faceUp = !card.isFaceUp;
     }
