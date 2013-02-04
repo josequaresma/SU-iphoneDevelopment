@@ -23,6 +23,13 @@
 
 @implementation CardGameViewController
 
+- (IBAction)dealButton {
+    //[self.game initWithCardCount:[self.cardButtons count] usingDeck:[[PlayingCardDeck alloc] init]];
+    
+    self.game = nil;
+    self.flipCount = 0;
+    [self updateUI];
+}
 
 - (CardMatchingGame *)game
 {

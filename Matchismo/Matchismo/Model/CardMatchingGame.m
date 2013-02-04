@@ -21,7 +21,7 @@
 
 - (NSString *)lastMoveDescription
 {
-    if (!_lastMoveDescription) _lastMoveDescription = @"description of last move :)";
+    if (!_lastMoveDescription) _lastMoveDescription = @"New deck";
     return _lastMoveDescription;
 }
 
