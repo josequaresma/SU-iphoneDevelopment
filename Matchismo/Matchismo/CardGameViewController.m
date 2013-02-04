@@ -15,16 +15,26 @@
 @property (nonatomic) int flipCount;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 
-@property (strong, nonatomic) PlayingCardDeck *myDeck;
+@property (strong, nonatomic) Deck *deck;
 
 @end
 
 @implementation CardGameViewController
 
-- (PlayingCardDeck *)myDeck{
-    if(!_myDeck) { _myDeck = [[PlayingCardDeck alloc] init]; }
-    return _myDeck;
+- (Deck *)deck{
+    if(!_deck) { _deck = [[PlayingCardDeck alloc] init]; }
+    return _deck;
 }
+
+- (void)setCardButtons:(NSArray *)cardButtons
+{
+    _cardButtons = cardButtons;
+    for (UIButton *cardButton in cardButtons) {
+        Card *card = [self.deck drawRandomCard];
+        [cardButton setTitle:card.contents forState:UIControlStateSelected];
+    }
+}
+
 
 - (void)setFlipCount:(int)flipCount
 {
@@ -35,33 +45,7 @@
 
 - (IBAction)flipCard:(UIButton *)sender
 {
-    
-    if(sender.selected){
-        sender.selected = !sender.selected;
-        self.flipCount++;
-    } else {
-        PlayingCard *myCard = (PlayingCard *)[self.myDeck drawRandomCard];
-        
-        if (myCard) {
-            [sender setTitle:[myCard contents] forState:UIControlStateSelected];
-            sender.selected = !sender.selected;
-            self.flipCount++;
-        } else {
-            
-            //  Oh noes! Out of cards!
-            UIAlertView *myAlert = [[UIAlertView alloc] initWithTitle:@"All out of cards!"
-                                                              message:nil
-                                                             delegate:nil
-                                                    cancelButtonTitle:nil
-                                                    otherButtonTitles:@"Deal again!", nil];
-            
-            [myAlert show];
-            
-            //  nil the deck and set the flipCount to 0
-            self.myDeck = nil;
-            [self setFlipCount:0];
-        }
-    }
-    
+    sender.selected = !sender.selected;
+    self.flipCount++;
 }
 @end
