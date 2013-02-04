@@ -66,27 +66,45 @@
     Card *card = [self cardAtIndex:index];
     if (!card.isUnplayable) {
         if (!card.isFaceUp) {
+            
+            NSMutableArray *tmp = [[NSMutableArray alloc] init];
+            
             for (Card *otherCard in self.cards) {
                 if (otherCard.isFaceUp && !otherCard.isUnplayable) {
-                    int matchScore = [card match:@[otherCard]];
-                    if (matchScore) {
-                        otherCard.unplayable = YES;
-                        card.unplayable = YES;
-                        self.score += matchScore * MATCH_BONUS;
-                        self.lastMoveDescription = [NSString stringWithFormat:@"Matched %@ and %@ for %d points",
-                                                    card.contents, otherCard.contents, matchScore * MATCH_BONUS];
-                    } else
-                    {
-                        otherCard.faceUp = NO;
-                        self.score -= MISMATCH_PENALTY;
-                        self.lastMoveDescription = [NSString stringWithFormat:@"%@ and %@ don't match! %d points penalty!",
-                                                    card.contents, otherCard.contents, MISMATCH_PENALTY];
+                    [tmp addObject:otherCard];
+                    if ((!self.isIn3CardMode) || ([tmp count] > 1)) {
+                        break;
                     }
-                    if (!self.isIn3CardMode) {break;}
+                }
+            }
+            
+            if ((self.isIn3CardMode && ([tmp count] == 2)) || (!self.isIn3CardMode && ([tmp count] == 1))) {
+                
+                NSLog(@"array size: %d", [tmp count]);
+                
+                int matchScore = [card match:tmp];
+                NSMutableArray *print = [[NSMutableArray alloc] initWithArray:tmp]; //copy the references??
+                [print addObject:card];
+                
+                if (matchScore) {
+                    for (Card *card in print) {
+                        card.unplayable = YES;
+                    }
+                    self.score += matchScore * MATCH_BONUS;
+                    self.lastMoveDescription = [NSString stringWithFormat:@"Matched %@ for %d points",
+                                                [print componentsJoinedByString:@" and "], matchScore * MATCH_BONUS];
                 } else
                 {
-                    self.lastMoveDescription = [NSString stringWithFormat:@"Flipped up %@", card.contents];
+                    for (Card *card in tmp) {
+                        card.faceUp = NO;
+                    }
+                    self.score -= MISMATCH_PENALTY;
+                    self.lastMoveDescription = [NSString stringWithFormat:@"%@ don't match! %d points penalty!",
+                                                [print componentsJoinedByString:@" and "], MISMATCH_PENALTY];
                 }
+            } else
+            {
+                self.lastMoveDescription = [NSString stringWithFormat:@"Flipped up %@", card.contents];
             }
             self.score -= FLIP_COST;
         } else

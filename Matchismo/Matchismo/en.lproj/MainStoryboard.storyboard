@@ -312,7 +312,7 @@
                                     <segment title="3 cards"/>
                                 </segments>
                                 <connections>
-                                    <action selector="gameModeControl:" destination="2" eventType="valueChanged" id="84F-ev-5Ec"/>
+                                    <action selector="gameModeControl:" destination="2" eventType="valueChanged" id="ouN-9G-b3B"/>
                                 </connections>
                             </segmentedControl>
                         </subviews>
@@ -320,6 +320,7 @@
                     </view>
                     <connections>
                         <outlet property="flipsLabel" destination="CXF-Le-sEk" id="qCB-Bc-KA1"/>
+                        <outlet property="gameModeButton" destination="piD-TX-WFo" id="Znb-fq-auH"/>
                         <outlet property="lastMoveLabel" destination="lAE-HB-QJe" id="PAG-oz-DBq"/>
                         <outlet property="scoreLabel" destination="53Z-Km-8ME" id="ZKi-fl-cOu"/>
                         <outletCollection property="cardButtons" destination="Q2M-oR-aBS" id="7ed-x5-Ydq"/>
@@ -352,6 +353,7 @@
                 <relationship kind="action" name="flipCard:" candidateClass="UIButton"/>
                 <relationship kind="action" name="gameModeControl:" candidateClass="UISegmentedControl"/>
                 <relationship kind="outlet" name="flipsLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="gameModeButton" candidateClass="UISegmentedControl"/>
                 <relationship kind="outlet" name="lastMoveLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="scoreLabel" candidateClass="UILabel"/>
                 <relationship kind="outletCollection" name="cardButtons" candidateClass="UIButton"/>

@@ -18,28 +18,31 @@
 @property (strong, nonatomic) CardMatchingGame *game;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (weak, nonatomic) IBOutlet UILabel *lastMoveLabel;
-
+@property (weak, nonatomic) IBOutlet UISegmentedControl *gameModeButton;
 
 @end
 
 @implementation CardGameViewController
 
 - (IBAction)gameModeControl:(UISegmentedControl *)sender {
-    self.game.in3CardMode = sender.selectedSegmentIndex;
+    self.game.in3CardMode = (sender.selectedSegmentIndex == 1) ? YES : NO;
+    NSLog(@"changing game mode to %d", sender.selectedSegmentIndex);
 }
 
 - (IBAction)dealButton {
-    //[self.game initWithCardCount:[self.cardButtons count] usingDeck:[[PlayingCardDeck alloc] init]];
-    
     self.game = nil;
     self.flipCount = 0;
+    [self.gameModeButton setEnabled:YES];
     [self updateUI];
 }
 
 - (CardMatchingGame *)game
 {
-    if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
-                                                         usingDeck:[[PlayingCardDeck alloc] init]];
+    if (!_game) {
+        _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
+                                                  usingDeck:[[PlayingCardDeck alloc] init]];
+        _game.in3CardMode = (self.gameModeButton.selectedSegmentIndex == 1) ? YES : NO;
+    }
     return _game;
 }
 
@@ -52,6 +55,8 @@
 
 - (void)updateUI
 {
+    UIImage *cardBackImage = [UIImage imageNamed:@"cardback.jpeg"];
+    UIImage *noImage = [UIImage imageNamed:@"white.jpeg"];;
     for (UIButton *cardButton in self.cardButtons) {
         Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]];
         [cardButton setTitle:card.contents forState:UIControlStateSelected];
@@ -59,12 +64,17 @@
         cardButton.selected = card.isFaceUp;
         cardButton.enabled = !card.isUnplayable;
         cardButton.alpha = card.isUnplayable ? 0.3 : 1.0;
+        if (!card.isFaceUp) {
+            [cardButton setBackgroundImage:cardBackImage forState:UIControlStateNormal];
+        } else
+        {
+            [cardButton setBackgroundImage:noImage forState:UIControlStateSelected];
+            [cardButton setBackgroundImage:noImage forState:UIControlStateSelected|UIControlStateDisabled];
+        }
     }
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
     self.lastMoveLabel.text = self.game.lastMoveDescription;
 }
-
-
 
 - (void)setFlipCount:(int)flipCount
 {
@@ -75,6 +85,9 @@
 
 - (IBAction)flipCard:(UIButton *)sender
 {
+    if (self.flipCount == 0) {
+        [self.gameModeButton setEnabled:NO];
+    }
     [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
     self.flipCount++;
     [self updateUI];

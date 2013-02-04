@@ -24,6 +24,15 @@
         } else if (othercard.rank == self.rank){
             score = 4;
         }
+    } else if ([otherCards count] == 2)
+    {
+        PlayingCard *othercard1 = otherCards[0];
+        PlayingCard *othercard2 = otherCards[1];
+        if (([othercard1.suit isEqualToString:self.suit]) && ([othercard2.suit isEqualToString:self.suit])) {
+            score = 4;
+        } else if ((othercard1.rank == self.rank) && (othercard1.rank == self.rank)){
+            score = 8;
+        }
     }
     return score;
 }
